@@ -4,17 +4,19 @@ import '../globals.css';
 export default function Home() {
   return (
     <div className="">
-        <Navbar />
-        <div className='mx-auto w-1/2'>
-
-            <iframe id = "map"
-                width="600"
-                height="450"
+       
+        <div className=''>
+          <div className='sticky top-0'>
+            <Navbar />
+          </div>
+            
+            <iframe className='h-screen w-screen flex'
                 loading="lazy"
                 allowFullScreen
                 referrerPolicy="no-referrer-when-downgrade"
                 src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCGlFIC2YyWVZEEGYJbLQMdBujLkLgWkUg
-                    &q=Space+Needle,Seattle+WA">
+                    &q=United+States">
+                      
             </iframe>
             
         </div>
