@@ -6,6 +6,7 @@ from google.adk.models.lite_llm import LiteLlm # For multi-model support
 from google.adk.sessions import InMemorySessionService
 from google.adk.runners import Runner
 from google.genai import types # For creating message Content/Parts
+from google.adk.tools import google_search
 
 # imports for timezones
 import datetime
@@ -22,6 +23,13 @@ def get_budget(budget: int) -> dict:
     report = (f"Alright lets work with that")
     return {"status": "success", "report": report}
 
+'''
+def get_location(location: str) -> dict:
+    return {"status": "success"}
+
+def get_date(date: str) -> dict:
+    return {"status": "success"}
+'''
 root_agent = Agent(
     name="itinerary_time_agent",
     model="gemini-2.0-flash",
@@ -29,7 +37,7 @@ root_agent = Agent(
         "Agent to help plan out an itenerary with a trip based on numerous inputs"
     ),
     instruction=(
-        "You are a helpful agent that helps create an itenerary on the trip based on a budget, destination, date, and weather"
+        "You are a helpful agent that helps create an itenerary on the trip based on a budget, destination, and date"
     ),
     tools=[get_budget],
 )
