@@ -12,28 +12,34 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-[#0d016dc3]">
+    <div className="bg-[#0A014F] h-screen ">
        
         <div className=''>
-          <div className='sticky top-0'>
+          <div className='absolute top-5 left-5'>
             <Navbar />
-          </div>
-          <div>
-            <input type="text" value={inputValue} onChange={handleChange} />
-              <p>User Input: {inputValue}</p>
-          </div>
             
-            <iframe className='h-screen w-screen flex'
-                loading="lazy"
-                allowFullScreen
-                referrerPolicy="no-referrer-when-downgrade"
-                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCGlFIC2YyWVZEEGYJbLQMdBujLkLgWkUg
-                    &q=United+States">
-                      
-            </iframe>
-            
+          </div>
+
+          <iframe className='h-120 w-250 flex mx-auto rounded-full pt-5 mb-5'
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCGlFIC2YyWVZEEGYJbLQMdBujLkLgWkUg
+                  &q=United+States">
+                    
+          </iframe>
+          
+          <div className='flex justify-center'>
+            <p className='text-white'>User Input: {inputValue}</p>
+          </div>
+          
+          <div className='flex justify-center '>
+
+            <input className='bg-gray-500 w-250 ' type="text" value={inputValue} onChange={handleChange} />
+          
+          </div>
+          
         </div>
-        <h1>Home Page</h1>
     </div>
   );
 };
