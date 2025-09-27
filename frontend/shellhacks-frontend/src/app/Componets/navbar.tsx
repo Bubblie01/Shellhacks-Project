@@ -20,10 +20,11 @@ const Navbar = () => {
                     <li><a href="../home" className="text-2xl mt-20">Home</a></li>
                     <li><a href="../profile" className="text-2xl mt-10">Profile</a></li>
                     <li><a href="../display" className="text-2xl mt-10">Display(Test)</a></li>
-                </ul>
-                <button onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })} className="absolute bottom-10 text-center">
+                    <button onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })} className=" text-2x1 mt-10 bg-black rounded-full">
                     Log Out
                 </button>
+                </ul>
+                
             </div>
         </div>
 
