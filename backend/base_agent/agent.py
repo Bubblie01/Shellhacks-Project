@@ -53,7 +53,7 @@ culture_finder_tool = AgentTool(agent=culture_finder)
 event_finder_tool = AgentTool(agent=event_finder)
 
 # location agent, focused on finding information about the location the user queries about.
-location_agent = Agent(
+location_agent = LlmAgent(
     name = "itinerary_location_agent",
     model = "gemini-2.5-flash",
     description = "Provides information about the culture and celebratory events "
