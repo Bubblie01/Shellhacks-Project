@@ -61,7 +61,7 @@ export default function Home() {
 
         <div className='flex justify-center text-white'>
           <button className="mt-5 btn btn-success btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl" onClick={sendPayload}>Done</button>
-          <p>{inputValue}</p>
+          <p>{}</p>
         </div>
       </div>
     </div>
