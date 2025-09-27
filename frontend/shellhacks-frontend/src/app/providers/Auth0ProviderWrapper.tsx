@@ -9,7 +9,8 @@ export default function Auth0ProviderWrapper({ children }: { children: React.Rea
       domain="dev-cicajg17b3i3mwri.us.auth0.com"
       clientId="nUDLnrgeMyMmz5B7SoBUiE2YTGmez81F"
       authorizationParams={{
-        redirect_uri: typeof window !== "undefined" ? window.location.origin : "http://localhost:3000/home"
+        connection: "google-oauth2",
+        redirect_uri: "http://localhost:3000/home"
       }}
     >
       {children}
