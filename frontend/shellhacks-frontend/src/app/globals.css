@@ -26,9 +26,3 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.drawer {
-  background-color: #7765E3;
-  margin: 50;
-  width: auto;
-  display:inline-flex;
-}
