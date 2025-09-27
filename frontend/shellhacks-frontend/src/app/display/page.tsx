@@ -3,11 +3,11 @@ import Navbar from '../Componets/navbar';
 
 export default function Home() {
   return (
-    <div className="h-screen w-screen bg-linear-to-bl from-[#0a014fc3] to-[#3251c3]">
+    <div className="h-screen w-screen bg-[#0a014fc3]">
         <Navbar />
-      <div className="mx-[8%] my-[8%] bg-[#00000062] h-[75%] w-[84%] rounded-3xl shadow-2xl">
+      <div className="mx-[8%] my-[8%] bg-[#3B60E4] h-[75%] w-[84%] rounded-3xl shadow-2xl">
         <div className="px-[5%] py-[5%]">
-          <h4>Rohan sux</h4>
+          <h4 className="font-bold text-4xl">Your Intinerary:</h4>
         </div>
       </div>
     </div>
