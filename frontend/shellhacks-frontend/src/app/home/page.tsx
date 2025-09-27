@@ -6,8 +6,6 @@ import '../globals.css';
 
 export default function Home() {
 
-
-
   const [inputValue, setInputValue] = useState('');
 
   const handleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -58,7 +56,7 @@ export default function Home() {
 
         <div className='flex justify-center '>
           {/* text is being saved inside inputValue so we can send it to backend */}
-          <textarea id="" className="textarea bg-gray-500 w-250 h-35" maxLength={250} placeholder="Place where you want to vacation here..." value={inputValue} onChange={handleChange}></textarea>
+          <textarea id="" className="textarea bg-gray-400 w-250 h-35" maxLength={250} placeholder="Place where you want to vacation here..." value={inputValue} onChange={handleChange}></textarea>
 
         </div>
 
