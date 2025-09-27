@@ -1,7 +1,7 @@
 
 export default function Home() {
   return (
-    <div className="overflow-hidden  h-screen w-screen flex bg-linear-to-bl from-[#6c5ccc] to-[#3251c3]">
+    <div className="  h-screen w-screen flex bg-linear-to-bl from-[#6c5ccc] to-[#3251c3]">
       <div className="block bg-[#0a014fc3] h-screen w-2/3 border-4 border-solid border-[#0d016dc3] inset-shadow-sm/50 rounded-tr-2xl rounded-br-2xl">
         <div className="carousel w-[94%] ml-[3%] my-[5%] rounded-tr-2xl rounded-br-2xl">
           <div id="slide1" className="carousel-item relative w-full">
