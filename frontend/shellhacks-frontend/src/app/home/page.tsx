@@ -30,13 +30,12 @@ export default function Home() {
           </iframe>
           
           <div className='flex justify-center'>
-            <p className='text-white'>User Input: {inputValue}</p>
+            <p className='text-white'>User Input:</p>
           </div>
           
           <div className='flex justify-center '>
-
-            <input className='bg-gray-500 w-250 ' type="text" value={inputValue} onChange={handleChange} />
-          
+            {/* text is being saved inside inputValue so we can send it to backend */}
+            <textarea className="textarea bg-gray-500 w-250 h-35" placeholder="I would like to plan a trip to Orlando" value={inputValue} onChange={handleChange} ></textarea>
           </div>
           
         </div>
