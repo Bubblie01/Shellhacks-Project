@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import Navbar from '../Componets/navbar';
 import '../globals.css';
 
+
 export default function Home() {
+
+
 
   const [inputValue, setInputValue] = useState('');
 
@@ -12,7 +15,7 @@ export default function Home() {
   };
 
   const sendPayload = async() => {
-    const url = "https://localhost:8000/apps/base_agent/users/temp_user_42/sessions/temp_session_42"; // Replace with your API endpoint
+    const url = "http://localhost:5000/apps/base_agent/users/temp_user_42/sessions/temp_session_42"; // Replace with your API endpoint
 
     try {
       const response = await fetch(url, {
@@ -20,7 +23,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text: inputValue }), // Wrap the string in an object
+        body: JSON.stringify({ text: {} }), // Wrap the string in an object
       });
 
       const result = await response.json();
@@ -50,18 +53,18 @@ export default function Home() {
         </iframe>
 
         <div className='flex justify-center'>
-          <p className='text-white'>User Input:</p>
+          <p>Character Limit: {inputValue.length}/250</p>
         </div>
 
         <div className='flex justify-center '>
           {/* text is being saved inside inputValue so we can send it to backend */}
-          <textarea className="textarea bg-gray-500 w-250 h-35" placeholder="Place where you want to vacation here..." value={inputValue} onChange={handleChange} ></textarea>
+          <textarea id="" className="textarea bg-gray-500 w-250 h-35" maxLength={250} placeholder="Place where you want to vacation here..." value={inputValue} onChange={handleChange}></textarea>
 
         </div>
 
         <div className='flex justify-center text-white'>
           <button className="mt-5 btn btn-success btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl" onClick={sendPayload}>Done</button>
-          <p>{}</p>
+          <p>{ }</p>
         </div>
       </div>
     </div>
