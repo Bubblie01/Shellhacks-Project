@@ -1,6 +1,21 @@
+# imports for the models
+import os
+import asyncio
+from google.adk.agents import Agent
+from google.adk.models.lite_llm import LiteLlm # For multi-model support
+from google.adk.sessions import InMemorySessionService
+from google.adk.runners import Runner
+from google.genai import types # For creating message Content/Parts
+
+# imports for timezones
 import datetime
 from zoneinfo import ZoneInfo
-from google.adk.agents import Agent
+
+# get google api key
+os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
+
+# Configure ADK to use API keys directly (not Vertex AI for this multi-model setup)
+os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "False"
 
 def get_weather(city: str) -> dict:
     """Retrieves the current weather report for a specified city.
@@ -53,7 +68,10 @@ def get_current_time(city: str) -> dict:
     )
     return {"status": "success", "report": report}
 
-
+# Root agent delegates tasks to sub agents
+    # make sure your instruction is EXTREMELY specific
+    # description is also important, but moreso for sub agents
+        # same for name
 root_agent = Agent(
     name="weather_time_agent",
     model="gemini-2.0-flash",
