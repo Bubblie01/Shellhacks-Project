@@ -1,5 +1,5 @@
 import Navbar from '../Componets/navbar';
-
+import ProfileInfo from '../Componets/ProfileInfo';
 
 export default function Home() {
   return (
