@@ -52,7 +52,7 @@ export default function Home() {
           font-semibold text-white
         ">Your time for memories, not logistics.</h4>
       </div>
-      <div className="h-screen w-1/3 text-center py-[10%]">
+      <div className="h-screen w-2/5 text-center py-[10%]">
         <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl">
           Name Place Holder
         </p>
