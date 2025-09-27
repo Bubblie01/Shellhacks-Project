@@ -7,7 +7,6 @@ from google.adk.runners import Runner
 from google.genai import types # For creating message Content/Parts
 from google.adk.tools import google_search
 from google.adk.agents import LlmAgent
-from google.adk.agents.remote_a2a_agent import RemoteA2aAgent
 from google.adk.tools.agent_tool import AgentTool
 
 # imports for timezones
