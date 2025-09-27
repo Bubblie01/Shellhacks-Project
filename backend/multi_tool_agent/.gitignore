@@ -1,0 +1,2 @@
+# Ignore environmental variables
+.env
