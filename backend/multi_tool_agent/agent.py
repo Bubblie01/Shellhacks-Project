@@ -10,7 +10,6 @@ from google.genai import types # For creating message Content/Parts
 # imports for timezones
 import datetime
 from zoneinfo import ZoneInfo
-from google.adk.agents import Agent
 
 def get_budget(budget: int) -> dict:
     if(budget < 0):
@@ -20,6 +19,8 @@ def get_budget(budget: int) -> dict:
                 f"budget cant be less than one"
             )
         }
+    report = (f"Alright lets work with that")
+    return {"status": "success", "report": report}
 
 root_agent = Agent(
     name="itinerary_time_agent",
