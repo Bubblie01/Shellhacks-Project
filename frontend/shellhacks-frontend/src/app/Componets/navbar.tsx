@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import "../globals.css";
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -40,10 +41,23 @@ const Navbar = () => {
           className="menu min-h-full w-80 p-5 md:w-96
                      text-white shadow-2xl
                      bg-gradient-to-b from-[#4D4092] via-[#5a4ac3] to-[#7765E3]
-                     backdrop-blur supports-[backdrop-filter]:bg-opacity-90"
+                     backdrop-blur supports-[backdrop-filter]:bg-opacity-90 flex flex-col"
         >
+          {/* Title row with logo */}
+            <div className="flex items-center gap-x-3 mb-6 px-1">
+            <Image
+                src="/ToureignerIcon.svg"
+                alt="Toureigner logo"
+                width={64}
+                height={64}
+                className="shrink-0 object-contain"
+                priority
+            />
+            <h1 className="text-2xl font-bold tracking-wide">Toureigner</h1>
+            </div>
+
           {/* Header / Profile */}
-          <div className="mb-6 mt-2 flex items-center gap-3 rounded-2xl bg-white/10 p-4 ring-1 ring-white/10">
+          <div className="mb-6 flex items-center gap-3 rounded-2xl bg-white/10 p-4 ring-1 ring-white/10">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 text-lg font-bold">
               <img
                 src={picture}
