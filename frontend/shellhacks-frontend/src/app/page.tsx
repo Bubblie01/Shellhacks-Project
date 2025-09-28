@@ -57,6 +57,7 @@ export default function Home() {
         <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-white sm:text-5xl">
           Toureigner
         </p>
+        
         <div className="divider mx-[5%]"></div>
         <div className="flex flex-col mx-[20%]">
           <button onClick={() => loginWithRedirect()} className="btn bg-white text-black border-[#e5e5e5] h-20 rounded-xl my-10 text-xl hover:bg-blue-200 focus:outline-2 focus:outline-offset-2 focus:black active:bg-blue-700">

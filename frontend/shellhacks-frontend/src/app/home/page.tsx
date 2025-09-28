@@ -10,6 +10,7 @@ import TutorialFab from "../Componets/TutorialFab";
 import Particles, {initParticlesEngine} from '@tsparticles/react'
 import { Container } from "@tsparticles/engine";
 import { loadStarsPreset } from '@tsparticles/preset-stars'
+import BackgroundParticles from "../Componets/BackgroundParticles";
 
 export default function Home() {
   const router = useRouter();
@@ -54,55 +55,9 @@ export default function Home() {
     }
   };
 
-  const [init, setInit] = useState(false);
-
-  // initialize the preset on the engine (return the Promise so types align)
-  useEffect(() => {
-    initParticlesEngine(async (engine) => {
-        await loadStarsPreset(engine);
-        //await loadBasic(engine);
-    }).then(() => {
-        setInit(true);
-    });
-}, []);
-
-  // loaded can be optional and non-async (or return Promise<void>)
-  const particlesLoaded = async (container?: Container) => {
-    if (!container) return;
-    console.log("Particles container loaded", container);
-  };
-
   return(
     <div className="bg-[#0A014F] min-h-screen overflow-hidden text-white">
-      <Particles
-        id="tsparticles"
-        particlesLoaded={particlesLoaded}
-        options={{
-          preset: "stars",
-          background: {
-            color: {
-              value: "transparent",
-            },
-          },
-          particles: {
-            number: {
-              value: 100,
-            },
-            color: {
-              value: "#ffffff"
-            },
-            move: {
-              enable: true,
-              speed: 0.5
-            },
-            size: {
-              value: { min: 1, max: 3 }
-            }
-          }
-        }}
-      />
-
-
+      <BackgroundParticles />
       <TutorialFab />
 
       {/* Navbar trigger */}
