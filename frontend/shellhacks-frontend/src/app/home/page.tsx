@@ -6,6 +6,7 @@ import Navbar from "../Componets/navbar";
 import "../globals.css";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/navigation";
+import TutorialFab from "../Componets/TutorialFab";
 
 export default function Home() {
   const router = useRouter();
@@ -45,11 +46,12 @@ export default function Home() {
 
   return (
     <div className="bg-[#0A014F] min-h-screen overflow-hidden text-white">
+      <TutorialFab />
       <div className="bg-[#3B60E4] w-300 ml-35 mt-2 rounded-4xl">
         <div className="absolute top-5 left-5">
           <Navbar />
         </div>
-
+      
         <iframe
           className="h-120 w-250 flex mx-auto rounded-full pt-5 mb-5"
           loading="lazy"
@@ -57,12 +59,12 @@ export default function Home() {
           referrerPolicy="no-referrer-when-downgrade"
           src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCGlFIC2YyWVZEEGYJbLQMdBujLkLgWkUg&q=United+States"
         />
-
+      
         <div className="mt-4 max-w-3xl mx-auto px-4">
           <div className="flex justify-between text-sm opacity-90">
             <span>Character Limit: {inputValue.length}/250</span>
           </div>
-
+      
           <textarea
             className="textarea bg-gray-200 w-full h-24 text-black mt-2 resize-none"
             maxLength={250}
@@ -70,10 +72,10 @@ export default function Home() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
           />
-
+      
           <div className="flex justify-center mt-5">
             <button
-              className="btn btn-success btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl mb-2"
+              className="btn btn-success btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl"
               onClick={handleSend}
               disabled={!inputValue.trim()}
             >
