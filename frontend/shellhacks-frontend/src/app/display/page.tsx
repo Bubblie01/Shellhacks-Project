@@ -10,6 +10,7 @@ import { Container } from "@tsparticles/engine";
 import { loadStarsPreset } from '@tsparticles/preset-stars'
 import { Background } from "tsparticles-engine";
 import BackgroundParticles from "../Componets/BackgroundParticles";
+import { marked } from 'marked';
 
 type AnyObj = Record<string, any>;
 
@@ -21,22 +22,54 @@ const extractTexts = (data: any): string[] =>
 
 function sanitizeHtml(html: string) {
   return DOMPurify.sanitize(html, {
-    ALLOWED_ATTR: ["href", "target", "rel"],
+    ALLOWED_TAGS: [
+      'p', 'br', 'strong', 'em', 'u', 's', 'code', 'pre', 
+      'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+      'ul', 'ol', 'li', 'blockquote', 'a', 'img',
+      'table', 'thead', 'tbody', 'tr', 'th', 'td'
+    ],
+    ALLOWED_ATTR: ["href", "target", "rel", "src", "alt", "title", "class"],
     ADD_ATTR: ["target", "rel"],
   });
 }
 
+function renderMarkdown(text: string): string {
+  // Configure marked options
+  marked.setOptions({
+    breaks: true, // Convert line breaks to <br>
+    gfm: true, // Enable GitHub Flavored Markdown
+  });
+  
+  return marked.parse(text) as string;
+}
+
 // Chat bubble
-function MessageBubble({ html, isUser }: { html: string; isUser: boolean }) {
-  const safe = useMemo(() => sanitizeHtml(html), [html]);
+function MessageBubble({ text, isUser, isMarkdown = false }: { 
+  text: string; 
+  isUser: boolean; 
+  isMarkdown?: boolean;
+}) {
+  const processedHtml = useMemo(() => {
+    if (isUser) {
+      // For user messages, just escape HTML
+      return text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    } else {
+      // For AI messages, render markdown then sanitize
+      const markdownHtml = isMarkdown ? renderMarkdown(text) : text;
+      return sanitizeHtml(markdownHtml);
+    }
+  }, [text, isUser, isMarkdown]);
 
   return (
     <div className={`flex w-full ${isUser ? "justify-end" : "justify-start"}`}>
       <div
-        className={`relative max-w-[75%] p-4 rounded-2xl text-sm leading-snug whitespace-pre-wrap
-          ${isUser ? "bg-[#7765E3] text-white rounded-br-none" : "bg-[#2f4fd4] text-white rounded-bl-none"}
+        className={`relative max-w-[75%] p-4 rounded-2xl text-sm leading-snug
+          ${isUser 
+            ? "bg-[#7765E3] text-white rounded-br-none whitespace-pre-wrap" 
+            : "bg-[#2f4fd4] text-white rounded-bl-none prose prose-invert prose-sm max-w-none"
+          }
         `}
-        dangerouslySetInnerHTML={{ __html: safe }}
+        dangerouslySetInnerHTML={{ __html: processedHtml }}
       />
     </div>
   );
@@ -57,7 +90,7 @@ function TypingIndicator() {
 
 export default function DisplayPage() {
   const [messages, setMessages] = useState<
-    { html: string; isUser: boolean }[]
+    { text: string; isUser: boolean }[]
   >([]);
   const [typing, setTyping] = useState<string>("");
   const [loading, setLoading] = useState(false);
@@ -83,16 +116,16 @@ export default function DisplayPage() {
   }, []);
 
   // typewriter effect
-  const typeOut = (fullHtml: string, ms = 10) =>
+  const typeOut = (fullText: string, ms = 10) =>
     new Promise<void>((resolve) => {
       setTyping("");
       let i = 0;
       const id = setInterval(() => {
         i++;
-        setTyping(fullHtml.slice(0, i));
-        if (i >= fullHtml.length) {
+        setTyping(fullText.slice(0, i));
+        if (i >= fullText.length) {
           clearInterval(id);
-          setMessages((prev) => [...prev, { html: fullHtml, isUser: false }]);
+          setMessages((prev) => [...prev, { text: fullText, isUser: false }]);
           setTyping("");
           resolve();
         }
@@ -102,8 +135,7 @@ export default function DisplayPage() {
   const sendMessage = async (text: string) => {
     setSending(true);
 
-    const userHtml = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    setMessages((prev) => [...prev, { html: userHtml, isUser: true }]);
+    setMessages((prev) => [...prev, { text, isUser: true }]);
 
     try {
       const sessionId =
@@ -146,8 +178,6 @@ export default function DisplayPage() {
     }
   };
 
-
-  
   // composer
   const onSendClick = () => {
     const t = inputValue.trim();
@@ -170,8 +200,9 @@ export default function DisplayPage() {
       return;
     }
 
-    // Remove HTML tags for plain text
-    const plainText = lastAiMessage.html.replace(/<[^>]+>/g, "");
+    // Convert markdown to HTML, then strip HTML tags for plain text
+    const htmlContent = renderMarkdown(lastAiMessage.text);
+    const plainText = htmlContent.replace(/<[^>]+>/g, "");
 
     const doc = new jsPDF();
     doc.setFont("helvetica", "normal");
@@ -199,15 +230,21 @@ export default function DisplayPage() {
             className="flex-1 rounded-2xl p-4 overflow-auto space-y-4 bg-[#394dd6]/30"
           >
             {messages.map((m, i) => (
-              <MessageBubble key={i} html={m.html} isUser={m.isUser} />
+              <MessageBubble 
+                key={i} 
+                text={m.text} 
+                isUser={m.isUser} 
+                isMarkdown={!m.isUser} 
+              />
             ))}
 
             {loading && <TypingIndicator />}
 
             {typing && (
               <MessageBubble
-                html={typing + `<span class="animate-pulse">▌</span>`}
+                text={typing + "▌"}
                 isUser={false}
+                isMarkdown={true}
               />
             )}
           </div>
