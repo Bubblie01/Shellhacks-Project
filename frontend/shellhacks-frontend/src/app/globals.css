@@ -45,7 +45,7 @@ body {
 }
 
 html {
-  scrollbar-gutter: stable both-edges;
+  overflow-y: auto;
+  scrollbar-gutter: auto;
 }
-
 

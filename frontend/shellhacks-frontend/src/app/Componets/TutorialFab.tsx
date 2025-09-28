@@ -6,40 +6,45 @@ import React, { useEffect, useState } from "react";
 export default function TutorialFab() {
   const [open, setOpen] = useState(false);
 
-  // ESC to close
+  // ESC closes
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Prevent background scroll and prevent layout shift by adding body padding
+  // Lock scroll + compensate only while open
   useEffect(() => {
-    const root = document.documentElement;
+    const html = document.documentElement;
     const body = document.body;
 
+    const scrollbarWidth = window.innerWidth - html.clientWidth;
     if (open) {
-      // width of the removed scrollbar
-      const scrollbarWidth = window.innerWidth - root.clientWidth;
+      // lock scroll
+      html.style.overflow = "hidden";
+      body.style.overflow = "hidden";
+      // compensate if a real scrollbar was removed (Windows)
       if (scrollbarWidth > 0) {
+        html.style.paddingRight = `${scrollbarWidth}px`;
         body.style.paddingRight = `${scrollbarWidth}px`;
       }
-      body.style.overflow = "hidden";
     } else {
+      html.style.overflow = "";
       body.style.overflow = "";
+      html.style.paddingRight = "";
       body.style.paddingRight = "";
     }
 
-    // cleanup on unmount just in case
     return () => {
+      html.style.overflow = "";
       body.style.overflow = "";
+      html.style.paddingRight = "";
       body.style.paddingRight = "";
     };
   }, [open]);
 
   return (
     <>
-      {/* Bottom-right FAB */}
       <button
         type="button"
         aria-label="Open tutorial"
@@ -51,32 +56,25 @@ export default function TutorialFab() {
         ?
       </button>
 
-      {/* DaisyUI modal (state-driven) */}
       <div
         className={`modal ${open ? "modal-open" : ""} z-[80]`}
-        onClick={() => setOpen(false)} // click backdrop to close
+        onClick={() => setOpen(false)}
         aria-hidden={!open}
       >
         <div
           className="modal-box rounded-3xl bg-[#1b226d]/90 text-white shadow-2xl ring-1 ring-white/15"
-          onClick={(e) => e.stopPropagation()} // keep clicks inside
+          onClick={(e) => e.stopPropagation()}
           role="dialog"
           aria-modal="true"
-          aria-label="How to use TripMate"
+          aria-label="How to use Toureigner"
         >
-          {/* Header */}
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-2xl font-bold">How to use TripMate</h3>
-            <button
-              className="btn btn-sm btn-ghost text-white"
-              onClick={() => setOpen(false)}
-              aria-label="Close tutorial"
-            >
+            <h3 className="text-2xl font-bold">How to use Toureigner</h3>
+            <button className="btn btn-sm btn-ghost text-white" onClick={() => setOpen(false)}>
               ✕
             </button>
           </div>
 
-          {/* Body */}
           <div className="space-y-4">
             <div className="alert bg-white/10 border-white/10">
               <span>1) On the Home page, type your trip details (budget, dates, interests).</span>
@@ -92,7 +90,6 @@ export default function TutorialFab() {
             </div>
           </div>
 
-          {/* Footer */}
           <div className="modal-action">
             <button
               className="btn btn-primary bg-[#3B60E4] border-white/20 hover:bg-[#4a6ef0]"

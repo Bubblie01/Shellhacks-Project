@@ -13,6 +13,7 @@ export default function Home() {
   const { isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
 
   const [inputValue, setInputValue] = useState("");
+  const maxLen = 250;
 
   // create (or reuse) a session for this user
   useEffect(() => {
@@ -25,58 +26,95 @@ export default function Home() {
     (async () => {
       try {
         await getAccessTokenSilently();
-        const username = (user?.name ?? "").replace(/\s+/g, "_");
+        const username = (user?.name ?? "").replace(/\s+/g, "_") || "user";
         sessionStorage.setItem("agent_username", username);
 
-        // start session on backend (fire-and-forget)
         const link = `http://localhost:8000/apps/base_agent/users/${username}/sessions/${uuid}`;
-        fetch(link, { method: "POST", headers: { "Content-Type": "text/plain" }, body: "" }).catch(
-          () => {}
-        );
+        fetch(link, { method: "POST" }).catch(() => {});
       } catch {
-        // ignore; we still allow local UX
+        // allow UX even without token
       }
     })();
   }, [isLoading, isAuthenticated, user, getAccessTokenSilently]);
 
   const handleSend = () => {
-    sessionStorage.setItem("agent_input", inputValue.trim());
+    const trimmed = inputValue.trim();
+    if (!trimmed) return;
+    sessionStorage.setItem("agent_input", trimmed);
     router.push("/display");
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
   };
 
   return (
     <div className="bg-[#0A014F] min-h-screen overflow-hidden text-white">
       <TutorialFab />
+
+      {/* Navbar trigger */}
       <div className="absolute top-5 left-5">
         <Navbar />
       </div>
-    
-      <iframe
-        className="h-120 w-250 flex mx-auto rounded-full pt-5 mb-5"
-        loading="lazy"
-        allowFullScreen
-        referrerPolicy="no-referrer-when-downgrade"
-        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCGlFIC2YyWVZEEGYJbLQMdBujLkLgWkUg&q=United+States"
-      />
-    
-      <div className="mt-4 max-w-3xl mx-auto px-4">
-        <div className="flex justify-between text-sm opacity-90">
-          <span>Character Limit: {inputValue.length}/250</span>
+
+      {/* Map */}
+      <div className="mx-auto mt-6 w-full max-w-3xl px-4">
+        <iframe
+          className="aspect-video w-full rounded-2xl shadow-lg"
+          loading="lazy"
+          allowFullScreen
+          referrerPolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCGlFIC2YyWVZEEGYJbLQMdBujLkLgWkUg&q=United+States"
+          title="Location map"
+        />
+      </div>
+
+      {/* Input area */}
+      <div className="mt-6 max-w-3xl mx-auto px-4">
+        <div className="flex justify-between text-sm">
+          <span
+            className={`transition-colors ${
+              inputValue.length > maxLen - 20
+                ? "text-red-300"
+                : inputValue.length > maxLen - 50
+                ? "text-amber-300"
+                : "opacity-90"
+            }`}
+            aria-live="polite"
+          >
+            Character Limit: {inputValue.length}/{maxLen}
+          </span>
+          <span className="hidden sm:inline opacity-70">
+            Shift+Enter for newline • Enter to send
+          </span>
         </div>
-    
+
+        <label htmlFor="agent-textarea" className="sr-only">
+          Message for the AI
+        </label>
+
         <textarea
-          className="textarea bg-gray-200 w-full h-24 text-black mt-2 resize-none"
-          maxLength={250}
+          id="agent-textarea"
+          className="textarea w-full h-28 mt-2 resize-none rounded-xl bg-gray-200/95 text-black
+                     focus:outline-none focus:ring-2 focus:ring-[#7765E3] focus:ring-offset-2 focus:ring-offset-[#0A014F]"
+          maxLength={maxLen}
           placeholder="Type your follow-up for the AI… (Shift+Enter for newline, Enter to send)"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={onKeyDown}
         />
-    
+
         <div className="flex justify-center mt-5">
           <button
-            className="btn btn-success btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl"
+            className="btn btn-success btn-wide md:btn-lg
+                       disabled:opacity-50 disabled:cursor-not-allowed
+                       focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
             onClick={handleSend}
             disabled={!inputValue.trim()}
+            type="button"
           >
             Done
           </button>
