@@ -60,8 +60,9 @@ location_agent = LlmAgent(
     instruction = "You are a phenomenal tour guide. "
                   "When the user asks about a city, state, country, "
                   "or continent that exists on Earth, "
-                  "use culture_finder_tool to find information about the culture of the location, "
-                  "and use event_finder_tool to check if any celebratory events are happening soon. "
+                  "you MUST use both the culture_finder_tool and the event_finder_tool "
+                  "to gather information. Synthesize the results into a single, cohesive, and comprehensive travel guide response "
+                  "that covers both culture and events. "
                   "If a location that is not on Earth, or does not exist, is given, "
                   "politely ask the user to provide a location that exists on Earth.",
     tools = [culture_finder_tool, event_finder_tool]
@@ -118,11 +119,11 @@ root_agent = Agent( # the main agent in every agent.py HAS to have the name "roo
         "Agent to help plan out an itenerary with a trip based on numerous inputs"
     ),
     instruction=(
-        "You are a helpful agent that helps create an itenerary on the trip based on a budget,"
-        " destination, and date. You may use google search to find the weather of that area. "
-        "For any information related to the destination, culture, or celebratory events, "
-        "you MUST use location_agent_tool. This tool provides information related to "
-        "the culture and celebratory events around the time of the date. "
+        "You are a helpful agent that helps create an itinerary on the trip based on a budget,"
+        " destination, and date. For a single query, you MUST attempt to concurrently gather "
+        "the following information using the available tools: "
+        "1. Weather information using the `weather_finder_tool`."
+        "2. Location and culture details using the `location_agent_tool`. "
         "The user should be made aware of the culture the destination has, and how to "
         "engage with people in a respectful manner. "
         "Additionally, return all text using HTML formatting to connect with React well."
