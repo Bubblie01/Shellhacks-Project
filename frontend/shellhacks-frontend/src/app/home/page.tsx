@@ -2,9 +2,11 @@
 import React, { useState } from 'react';
 import Navbar from '../Componets/navbar';
 import '../globals.css';
+import { useEffect } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export default function Home() {
-
+  const { isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
   const [inputValue, setInputValue] = useState('');
 
   const handleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -12,24 +14,49 @@ export default function Home() {
   };
 
   const sendPayload = async() => {
-    const url = "https://localhost:8000/apps/base_agent/users/temp_user_42/sessions/temp_session_42"; // Replace with your API endpoint
-
-    try {
-      const response = await fetch(url, {
+    const res = await fetch(
+      "http://localhost:8000/apps/base_agent/users/temp_user_42/sessions/temp_session_42",
+      {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ text: inputValue }), // Wrap the string in an object
-      });
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      }
+    );
 
-      const result = await response.json();
-      console.log("Response:", result);
-    } catch (error) {
-      console.error("Error:", error);
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`${res.status} ${res.statusText}: ${text}`);
     }
+    return res.json();
   };
 
+  useEffect(() => {
+    if (isLoading) return;
+    if (!isAuthenticated || !user) return;
+
+    (async () => {
+      const token = await getAccessTokenSilently();
+      console.log(user?.name);
+      try{
+        const response = await fetch("http://localhost:8000/apps/base_agent/users/temp_user_42/sessions/temp_session_42", {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain",
+          },
+          body: "",
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Server returned ${response.status}`);
+        }
+        const data = await response.json();  // or res.text() if it doesn’t return JSON
+        console.log("Session started:", data);
+      }
+      catch(err){
+        console.error("Error starting session:", err);
+      }
+    })();
+  }, [isLoading, isAuthenticated, user, getAccessTokenSilently]);
 
   return (
     <div className="bg-[#0A014F] h-screen overflow-hidden ">
