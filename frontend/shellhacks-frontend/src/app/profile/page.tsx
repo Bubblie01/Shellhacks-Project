@@ -37,7 +37,7 @@ export default function Home() {
         name: "Isaiah Rivera",
         role: "Frontend/UI/UX/AI Middleman Designer",
         email: "isaiahekindred@gmail.com",
-        avatar: "https://media1.tenor.com/m/3RXA3ayBYZUAAAAC/gulp.gif",
+        avatar: "https://media1.tenor.com/m/JWPDuXIDQukAAAAC/cat-osu.gif",
         bio: "Designed the UI for the website using Daisy UI, connected the frontend and backend as well as the AI",
       },
       {
