@@ -13,78 +13,118 @@ const extractTexts = (data: any): string[] =>
     .map((part: AnyObj) => part?.text)
     .filter(Boolean);
 
-// Renders sanitized HTML safely
-function HtmlBubble({ html }: { html: string }) {
-  const safe = useMemo(
-    () =>
-      DOMPurify.sanitize(html, {
-        ALLOWED_ATTR: ["href", "target", "rel"],
-        ADD_ATTR: ["target", "rel"],
-      }),
-    [html]
-  );
+// Sanitize HTML
+function sanitizeHtml(html: string) {
+  return DOMPurify.sanitize(html, {
+    ALLOWED_ATTR: ["href", "target", "rel"],
+    ADD_ATTR: ["target", "rel"],
+  });
+}
+
+// Speech bubble
+function MessageBubble({
+  html,
+  isUser,
+}: {
+  html: string;
+  isUser: boolean;
+}) {
+  const safe = useMemo(() => sanitizeHtml(html), [html]);
 
   return (
     <div
-      className="p-4 rounded-xl bg-[#2f4fd4] whitespace-pre-wrap"
-      // If you have @tailwindcss/typography installed, swap the class above for "prose prose-invert max-w-none p-4 rounded-xl bg-[#2f4fd4]"
-      dangerouslySetInnerHTML={{ __html: safe }}
-    />
+      className={`flex w-full ${
+        isUser ? "justify-end" : "justify-start"
+      }`}
+    >
+      <div
+        className={`relative max-w-[75%] p-4 rounded-2xl text-sm leading-snug whitespace-pre-wrap
+          ${isUser ? "bg-[#7765E3] text-white rounded-br-none" : "bg-[#2f4fd4] text-white rounded-bl-none"}
+        `}
+        dangerouslySetInnerHTML={{ __html: safe }}
+      />
+      {/* Tail */}
+      <div
+        className={`absolute ${
+          isUser
+            ? "right-0 translate-x-1 translate-y-[10px] border-t-8 border-t-[#7765E3] border-l-8 border-l-transparent"
+            : "left-0 -translate-x-1 translate-y-[10px] border-t-8 border-t-[#2f4fd4] border-r-8 border-r-transparent"
+        }`}
+      />
+    </div>
+  );
+}
+
+// Typing dots bubble
+function TypingIndicator() {
+  return (
+    <div className="flex justify-start">
+      <div className="inline-flex items-center space-x-1 rounded-2xl rounded-bl-none bg-[#2f4fd4] px-4 py-3">
+        <span className="h-2 w-2 rounded-full bg-white opacity-80 animate-bounce [animation-delay:-0.3s]" />
+        <span className="h-2 w-2 rounded-full bg-white opacity-80 animate-bounce [animation-delay:-0.15s]" />
+        <span className="h-2 w-2 rounded-full bg-white opacity-80 animate-bounce" />
+      </div>
+    </div>
   );
 }
 
 export default function DisplayPage() {
-  const [messages, setMessages] = useState<string[]>([]); // finished AI messages (HTML)
-  const [typing, setTyping] = useState<string>("");       // currently typing (HTML)
+  const [messages, setMessages] = useState<
+    { html: string; isUser: boolean }[]
+  >([]);
+  const [typing, setTyping] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [sending, setSending] = useState(false);
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // auto-scroll as content grows
+  // scroll to bottom
   useEffect(() => {
     const el = containerRef.current;
     if (el) el.scrollTop = el.scrollHeight;
-  }, [messages, typing]);
+  }, [messages, typing, loading]);
 
-  // on first load, send the prompt saved from /home
+  // send initial saved input
   useEffect(() => {
     const initial = sessionStorage.getItem("agent_input") || "";
     if (initial.trim()) {
-      setInputValue(""); // clear composer
+      setInputValue("");
       void sendMessage(initial.trim());
       sessionStorage.removeItem("agent_input");
     }
   }, []);
 
-  // typewriter for a single HTML message
+  // typewriter effect
   const typeOut = (fullHtml: string, ms = 10) =>
     new Promise<void>((resolve) => {
       setTyping("");
       let i = 0;
       const id = setInterval(() => {
         i++;
-        setTyping(fullHtml.slice(0, i)); // feed partial HTML; browser is forgiving
+        setTyping(fullHtml.slice(0, i));
         if (i >= fullHtml.length) {
           clearInterval(id);
-          setMessages((prev) => [...prev, fullHtml]);
+          setMessages((prev) => [...prev, { html: fullHtml, isUser: false }]);
           setTyping("");
           resolve();
         }
       }, ms);
     });
 
-  // call backend and reveal each returned entry sequentially
   const sendMessage = async (text: string) => {
     setSending(true);
 
-    // Show user's message as a bubble (escaped/sanitized as HTML)
-    const userHtml = `<strong>You:</strong> ${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}`;
-    setMessages((prev) => [...prev, userHtml]);
+    const userHtml = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    setMessages((prev) => [...prev, { html: userHtml, isUser: true }]);
 
     try {
-      const sessionId = sessionStorage.getItem("agent_session_id") || "temp_session_42";
-      const username = sessionStorage.getItem("agent_username") || "temp_user_42";
+      const sessionId =
+        sessionStorage.getItem("agent_session_id") || "temp_session_42";
+      const username =
+        sessionStorage.getItem("agent_username") || "temp_user_42";
+
+      setLoading(true);
 
       const res = await fetch("http://localhost:8000/run", {
         method: "POST",
@@ -99,17 +139,21 @@ export default function DisplayPage() {
 
       if (!res.ok) {
         console.error("Request failed:", res.status, res.statusText);
+        setLoading(false);
         return;
       }
 
       const data = await res.json();
-      const texts = extractTexts(data); // these are HTML-ish strings
+      const texts = extractTexts(data);
+
+      setLoading(false);
 
       for (const entry of texts) {
         await typeOut(entry);
       }
     } catch (e) {
       console.error(e);
+      setLoading(false);
     } finally {
       setSending(false);
     }
@@ -136,30 +180,38 @@ export default function DisplayPage() {
         <div className="px-[5%] py-[5%] h-full flex flex-col">
           <h4 className="font-bold text-4xl mb-6">Your Itinerary:</h4>
 
-          {/* conversation area */}
+          {/* chat area */}
           <div
             ref={containerRef}
-            className="flex-1 rounded-2xl p-4 overflow-auto space-y-5 bg-[#394dd6]/30"
+            className="flex-1 rounded-2xl p-4 overflow-auto space-y-4 bg-[#394dd6]/30"
           >
             {messages.map((m, i) => (
-              <HtmlBubble key={i} html={m} />
+              <MessageBubble key={i} html={m.html} isUser={m.isUser} />
             ))}
 
+            {loading && <TypingIndicator />}
+
             {typing && (
-              <HtmlBubble html={typing + `<span class="animate-pulse">▌</span>`} />
+              <MessageBubble
+                html={typing + `<span class="animate-pulse">▌</span>`}
+                isUser={false}
+              />
             )}
           </div>
 
-          {/* composer (respond to the AI) */}
+          {/* composer */}
           <div className="mt-4">
             <div className="flex justify-between text-sm opacity-90">
               <span>Character Limit: {inputValue.length}/250</span>
+              <span className="hidden sm:inline">
+                Shift+Enter for newline • Enter to send
+              </span>
             </div>
 
             <textarea
-              className="textarea bg-gray-200 w-full h-28 text-black mt-2"
+              className="textarea bg-gray-200 w-full h-24 text-black mt-2 resize-none rounded-xl"
               maxLength={250}
-              placeholder="Type your follow-up for the AI… (Shift+Enter for newline, Enter to send)"
+              placeholder="Type your follow-up for the AI…"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={onKeyDown}
