@@ -1,12 +1,15 @@
 // app/home/page.tsx
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback} from "react";
 import Navbar from "../Componets/navbar";
 import "../globals.css";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/navigation";
 import TutorialFab from "../Componets/TutorialFab";
+import Particles, {initParticlesEngine} from '@tsparticles/react'
+import { Container } from "@tsparticles/engine";
+import { loadStarsPreset } from '@tsparticles/preset-stars'
 
 export default function Home() {
   const router = useRouter();
@@ -51,8 +54,55 @@ export default function Home() {
     }
   };
 
-  return (
+  const [init, setInit] = useState(false);
+
+  // initialize the preset on the engine (return the Promise so types align)
+  useEffect(() => {
+    initParticlesEngine(async (engine) => {
+        await loadStarsPreset(engine);
+        //await loadBasic(engine);
+    }).then(() => {
+        setInit(true);
+    });
+}, []);
+
+  // loaded can be optional and non-async (or return Promise<void>)
+  const particlesLoaded = async (container?: Container) => {
+    if (!container) return;
+    console.log("Particles container loaded", container);
+  };
+
+  return(
     <div className="bg-[#0A014F] min-h-screen overflow-hidden text-white">
+      <Particles
+        id="tsparticles"
+        particlesLoaded={particlesLoaded}
+        options={{
+          preset: "stars",
+          background: {
+            color: {
+              value: "transparent",
+            },
+          },
+          particles: {
+            number: {
+              value: 100,
+            },
+            color: {
+              value: "#ffffff"
+            },
+            move: {
+              enable: true,
+              speed: 0.5
+            },
+            size: {
+              value: { min: 1, max: 3 }
+            }
+          }
+        }}
+      />
+
+
       <TutorialFab />
 
       {/* Navbar trigger */}
@@ -61,7 +111,7 @@ export default function Home() {
       </div>
 
       {/* Map */}
-      <div className="mx-auto mt-6 w-full max-w-3xl px-4">
+      <div className="mx-auto mt-6 w-full max-w-3xl px-4 z-10 relative">
         <iframe
           className="aspect-video w-full rounded-2xl shadow-lg"
           loading="lazy"

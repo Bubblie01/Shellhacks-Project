@@ -4,6 +4,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Navbar from "../Componets/navbar";
 import DOMPurify from "dompurify";
+import Particles, {initParticlesEngine} from '@tsparticles/react'
+import { Container } from "@tsparticles/engine";
+import { loadStarsPreset } from '@tsparticles/preset-stars'
 
 type AnyObj = Record<string, any>;
 
@@ -129,8 +132,52 @@ export default function DisplayPage() {
     }
   };
 
+  const [init, setInit] = useState(false);
+  
+    // initialize the preset on the engine (return the Promise so types align)
+    useEffect(() => {
+      initParticlesEngine(async (engine) => {
+          await loadStarsPreset(engine);
+      }).then(() => {
+          setInit(true);
+      });
+  }, []);
+  
+    // loaded can be optional and non-async (or return Promise<void>)
+    const particlesLoaded = async (container?: Container) => {
+      if (!container) return;
+      console.log("Particles container loaded", container);
+    };
+
   return (
     <div className="h-screen w-screen bg-[#0a014fc3] text-white">
+      <Particles
+        id="tsparticles"
+        particlesLoaded={particlesLoaded}
+        options={{
+          preset: "stars",
+          background: {
+            color: {
+              value: "transparent",
+            },
+          },
+          particles: {
+            number: {
+              value: 100,
+            },
+            color: {
+              value: "#ffffff"
+            },
+            move: {
+              enable: true,
+              speed: 0.5
+            },
+            size: {
+              value: { min: 1, max: 3 }
+            }
+          }
+        }}
+      />
       <Navbar />
       <div className="fade-in2 mx-[8%] my-[8%] bg-[#3B60E4] h-[75%] w-[84%] rounded-3xl shadow-2xl overflow-hidden">
         <div className="px-[5%] py-[5%] h-full flex flex-col">
