@@ -9,6 +9,7 @@ type Person = {
   email: string;
   avatar: string;
   bio: string;
+  picCss?: string
 };
 
 export default function Home() {
@@ -20,15 +21,16 @@ export default function Home() {
         role: "Backend/AI Engineer",
         email: "rohan.suresh712@gmail.com",
         avatar: "https://media1.tenor.com/m/DFfCL02_DCcAAAAC/cat-look.gif",
-        bio: "Led the backend efforts while also doing the root AI and the API calls",
+        bio: "Led the backend efforts while also doing the root AI agent and the API calls",
       },
       {
         id: "2",
         name: "Joshua Sawyer",
         role: "Backend/API Engineer",
         email: "jawshs08@gmail.com",
-        avatar: "https://media1.tenor.com/m/p-wIO64HN5cAAAAC/wake-up.gif",
-        bio: "Designed part of the AI agents as well as connected them to one another, helped set up API calls",
+        avatar: "https://media1.tenor.com/m/I_50ZzW-Ti0AAAAd/dfghjkl.gif",
+        bio: "Designed the cultural and event AI agents as well as connected agents to each other, helped set up API calls",
+        picCss: "object-top",
       },
       {
         id: "3",
@@ -72,7 +74,7 @@ export default function Home() {
               <img
                 src={selected.avatar}
                 alt={selected.name}
-                className="w-full h-80 md:h-[26rem] object-cover"
+                className={`w-full h-80 md:h-[26rem] object-cover ${selected.picCss}`}
                 referrerPolicy="no-referrer"
                 onError={(e) => {
                   (e.currentTarget as HTMLImageElement).src = "/avatar.png";
@@ -126,8 +128,7 @@ export default function Home() {
               >
                 <div
                   className={`h-16 w-16 md:h-20 md:w-20 rounded-2xl overflow-hidden
-                              transition-all duration-300 ease-out
-                              ${active ? "ring-2 ring-white/40" : "ring-1 ring-white/10"}`}
+                              transition-all duration-300 ease-out`}
                 >
                   <img
                     src={p.avatar}
