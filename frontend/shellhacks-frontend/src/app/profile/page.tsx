@@ -126,8 +126,7 @@ export default function Home() {
               >
                 <div
                   className={`h-16 w-16 md:h-20 md:w-20 rounded-2xl overflow-hidden
-                              transition-all duration-300 ease-out
-                              ${active ? "ring-2 ring-white/40" : "ring-1 ring-white/10"}`}
+                              transition-all duration-300 ease-out`}
                 >
                   <img
                     src={p.avatar}
