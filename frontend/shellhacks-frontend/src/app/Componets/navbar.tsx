@@ -96,7 +96,7 @@ const Navbar = () => {
             </button>
 
             <p className="mt-4 text-center text-xs opacity-70">
-              © {new Date().getFullYear()} Your App
+              Made for ShellHacks 2025
             </p>
           </div>
         </aside>
