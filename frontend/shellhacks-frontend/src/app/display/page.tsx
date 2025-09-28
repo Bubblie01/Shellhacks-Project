@@ -4,6 +4,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Navbar from "../Componets/navbar";
 import DOMPurify from "dompurify";
+import { jsPDF } from "jspdf";
 
 type AnyObj = Record<string, any>;
 
@@ -13,7 +14,6 @@ const extractTexts = (data: any): string[] =>
     .map((part: AnyObj) => part?.text)
     .filter(Boolean);
 
-// Sanitize HTML
 function sanitizeHtml(html: string) {
   return DOMPurify.sanitize(html, {
     ALLOWED_ATTR: ["href", "target", "rel"],
@@ -21,35 +21,17 @@ function sanitizeHtml(html: string) {
   });
 }
 
-// Speech bubble
-function MessageBubble({
-  html,
-  isUser,
-}: {
-  html: string;
-  isUser: boolean;
-}) {
+// Chat bubble
+function MessageBubble({ html, isUser }: { html: string; isUser: boolean }) {
   const safe = useMemo(() => sanitizeHtml(html), [html]);
 
   return (
-    <div
-      className={`flex w-full ${
-        isUser ? "justify-end" : "justify-start"
-      }`}
-    >
+    <div className={`flex w-full ${isUser ? "justify-end" : "justify-start"}`}>
       <div
         className={`relative max-w-[75%] p-4 rounded-2xl text-sm leading-snug whitespace-pre-wrap
           ${isUser ? "bg-[#7765E3] text-white rounded-br-none" : "bg-[#2f4fd4] text-white rounded-bl-none"}
         `}
         dangerouslySetInnerHTML={{ __html: safe }}
-      />
-      {/* Tail */}
-      <div
-        className={`absolute ${
-          isUser
-            ? "right-0 translate-x-1 translate-y-[10px] border-t-8 border-t-[#7765E3] border-l-8 border-l-transparent"
-            : "left-0 -translate-x-1 translate-y-[10px] border-t-8 border-t-[#2f4fd4] border-r-8 border-r-transparent"
-        }`}
       />
     </div>
   );
@@ -173,6 +155,28 @@ export default function DisplayPage() {
     }
   };
 
+  // export last AI message as PDF
+  const exportItinerary = () => {
+    const lastAiMessage = [...messages].reverse().find((m) => !m.isUser);
+    if (!lastAiMessage) {
+      alert("No itinerary to export yet!");
+      return;
+    }
+
+    // Remove HTML tags for plain text
+    const plainText = lastAiMessage.html.replace(/<[^>]+>/g, "");
+
+    const doc = new jsPDF();
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+
+    // Wrap text to fit
+    const lines = doc.splitTextToSize(plainText, 180);
+    doc.text(lines, 10, 20);
+
+    doc.save("itinerary.pdf");
+  };
+
   return (
     <div className="h-screen w-screen bg-[#0a014fc3] text-white">
       <Navbar />
@@ -217,9 +221,16 @@ export default function DisplayPage() {
               onKeyDown={onKeyDown}
             />
 
-            <div className="flex justify-end mt-3">
+            <div className="flex justify-between mt-3">
               <button
-                className="btn btn-success btn-md"
+                className="btn btn-outline"
+                onClick={exportItinerary}
+                disabled={!messages.some((m) => !m.isUser)}
+              >
+                Export Itinerary
+              </button>
+              <button
+                className="btn btn-success"
                 onClick={onSendClick}
                 disabled={sending || !inputValue.trim()}
               >
