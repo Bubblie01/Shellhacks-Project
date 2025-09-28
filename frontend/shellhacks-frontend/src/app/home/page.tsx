@@ -6,6 +6,7 @@ import Navbar from "../Componets/navbar";
 import "../globals.css";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useRouter } from "next/navigation";
+import TutorialFab from "../Componets/TutorialFab";
 
 export default function Home() {
   const router = useRouter();
@@ -44,7 +45,8 @@ export default function Home() {
   };
 
   return (
-        <div className="bg-[#0A014F] min-h-screen overflow-hidden text-white">
+    <div className="bg-[#0A014F] min-h-screen overflow-hidden text-white">
+      <TutorialFab />
       <div className="absolute top-5 left-5">
         <Navbar />
       </div>

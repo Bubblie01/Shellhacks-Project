@@ -44,4 +44,8 @@ body {
   animation: fadeIn 1s ease-in-out forwards;
 }
 
+html {
+  scrollbar-gutter: stable both-edges;
+}
+
 
