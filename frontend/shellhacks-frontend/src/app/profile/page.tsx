@@ -89,10 +89,10 @@ export default function Home() {
               </p>
 
               <div className="mt-3 flex flex-wrap items-center gap-3">
-                <span className="badge badge-lg bg-white/15 border-white/20 text-white px-3 py-3">
+                <span className="badge badge-lg bg-white/15 border-white/20 text-white px-3 py-3 transition delay-150 duration-300 ease-in-out hover:scale-110 hover:shadow-md shadow-white motion-reduce:transition-none motionreduce:hover:transform-none">
                   {selected.role}
                 </span>
-                <span className="badge badge-lg bg-white/10 border-white/20 text-white px-3 py-3">
+                <span className="badge badge-lg bg-white/10 border-white/20 text-white px-3 py-3 transition delay-150 duration-300 ease-in-out hover:scale-110 hover:shadow-md shadow-white motion-reduce:transition-none motionreduce:hover:transform-none">
                   {selected.email}
                 </span>
               </div>
@@ -100,7 +100,7 @@ export default function Home() {
               <div className="card-actions justify-end mt-6">
                 <a
                   href={`mailto:${selected.email}`}
-                  className="btn btn-primary btn-lg normal-case"
+                  className="btn btn-primary btn-lg normal-case transition delay-150 duration-300 ease-in-out hover:scale-110 hover:shadow-md shadow-white motion-reduce:transition-none motionreduce:hover:transform-none"
                 >
                   Contact
                 </a>
