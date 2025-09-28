@@ -1,3 +1,4 @@
 # Ignore environmental variables in file hierarchy
 .env
 __pycache__/
+venv/
