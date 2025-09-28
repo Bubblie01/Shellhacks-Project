@@ -44,35 +44,32 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-[#0A014F] min-h-screen overflow-hidden text-white">
-      <div className="bg-[#3B60E4] w-350 ml-15 mt-2 rounded-full">
-        <div className="absolute top-5 left-5">
-          <Navbar />
+        <div className="bg-[#0A014F] min-h-screen overflow-hidden text-white">
+      <div className="absolute top-5 left-5">
+        <Navbar />
+      </div>
+    
+      <iframe
+        className="h-120 w-250 flex mx-auto rounded-full pt-5 mb-5"
+        loading="lazy"
+        allowFullScreen
+        referrerPolicy="no-referrer-when-downgrade"
+        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCGlFIC2YyWVZEEGYJbLQMdBujLkLgWkUg&q=United+States"
+      />
+    
+      <div className="mt-4 max-w-3xl mx-auto px-4">
+        <div className="flex justify-between text-sm opacity-90">
+          <span>Character Limit: {inputValue.length}/250</span>
         </div>
-
-        <iframe
-          className="h-120 w-250 flex mx-auto rounded-full pt-5 mb-5"
-          loading="lazy"
-          allowFullScreen
-          referrerPolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCGlFIC2YyWVZEEGYJbLQMdBujLkLgWkUg&q=United+States"
+    
+        <textarea
+          className="textarea bg-gray-200 w-full h-24 text-black mt-2 resize-none"
+          maxLength={250}
+          placeholder="Type your follow-up for the AI… (Shift+Enter for newline, Enter to send)"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
         />
-
-        <div className="flex justify-center">
-          {/* <p>Character Limit: {inputValue.length}/250</p> */}
-        </div>
-
-        <div className="flex justify-center">
-          <textarea
-            className="textarea bg-gray-400 w-250 h-35 text-black"
-            maxLength={250}
-            placeholder="Place where you want to vacation here..."
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-          />
-          <p className="absolute text-xs text-black">{inputValue.length}/250</p>
-        </div>
-
+    
         <div className="flex justify-center mt-5">
           <button
             className="btn btn-success btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl"
