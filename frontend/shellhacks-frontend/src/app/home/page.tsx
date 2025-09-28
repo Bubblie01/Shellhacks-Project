@@ -50,19 +50,18 @@ export default function Home() {
 
         </iframe>
 
-        <div className='flex justify-center'>
-          <p>Character Limit: {inputValue.length}/250</p>
+        <div className='flex w-screen '>
+          {/* <p>Character Limit: {inputValue.length}/250</p> */}
         </div>
 
         <div className='flex justify-center '>
           {/* text is being saved inside inputValue so we can send it to backend */}
           <textarea id="" className="textarea bg-gray-400 w-250 h-35" maxLength={250} placeholder="Place where you want to vacation here..." value={inputValue} onChange={handleChange}></textarea>
-
+          <span className='absolute text-black text-xs'>{inputValue.length}/250</span>
         </div>
 
         <div className='flex justify-center text-white'>
           <button className="mt-5 btn btn-success btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl" onClick={sendPayload}>Done</button>
-          <p>{ }</p>
         </div>
       </div>
     </div>
