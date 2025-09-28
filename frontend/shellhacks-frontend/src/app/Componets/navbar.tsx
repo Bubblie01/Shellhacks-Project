@@ -1,35 +1,98 @@
-"use client"
+"use client";
 import React from "react";
-import '../globals.css';
+import Link from "next/link";
+import "../globals.css";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Navbar = () => {
-    const { logout } = useAuth0();
-    return (
-        <div className="relative drawer">
-            <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-            <div className="drawer-content">
-                {/* Page content here */}
-                <label htmlFor="my-drawer" className="absolute top-5 left-5 btn btn-primary border-none drawer-button bg-[#7765E3] rounded-3xl w-25 h-20">≡≡</label>
-            </div>
-            <div className="drawer-side">
-                <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
-                <ul className="menu bg-[#4d4092da] text-base-content min-h-full w-80 p-4 shadow-2xl">
-                    {/* Sidebar content here */}
-                    <p className="text-2xl mt-10 ml-4 font-bold">Placeholder Name</p>
-                    <li><a href="../home" className="text-2xl mt-20">Home</a></li>
-                    <li><a href="../profile" className="text-2xl mt-10">Profile</a></li>
-                    <li><a href="../display" className="text-2xl mt-10">Display(Test)</a></li>
-                    <button onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })} className=" text-2x1 text-white mt-10 bg-black rounded-full">
-                    Log Out
-                </button>
-                </ul>
-                
-            </div>
-        </div>
+  const { logout, user } = useAuth0();
+  const displayName = user?.name ?? user?.nickname ?? user?.email ?? "Guest";
 
-    );
+  return (
+    <div className="relative drawer">
+      {/* Toggle */}
+      <input id="my-drawer" type="checkbox" className="drawer-toggle" />
 
+      {/* Page content */}
+      <div className="drawer-content">
+        <label
+          htmlFor="my-drawer"
+          className="drawer-button group fixed top-5 left-5 inline-flex items-center gap-2 rounded-2xl px-4 py-3 text-white shadow-lg
+                     bg-gradient-to-r from-[#4D4092] to-[#7765E3]
+                     hover:from-[#6a5be0] hover:to-[#8c82f0]
+                     active:scale-[0.98] transition-all duration-200"
+          aria-label="Open navigation menu"
+        >
+          <span className="text-xl leading-none">≡</span>
+          <span className="text-sm font-semibold opacity-90 group-hover:opacity-100">
+            Menu
+          </span>
+        </label>
+      </div>
+
+      {/* Drawer side */}
+      <div className="drawer-side z-50">
+        <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
+
+        <aside
+          className="menu min-h-full w-80 p-5 md:w-96
+                     text-white shadow-2xl
+                     bg-gradient-to-b from-[#4D4092] via-[#5a4ac3] to-[#7765E3]
+                     backdrop-blur supports-[backdrop-filter]:bg-opacity-90"
+        >
+          {/* Header / Profile */}
+          <div className="mb-6 mt-2 flex items-center gap-3 rounded-2xl bg-white/10 p-4 ring-1 ring-white/10">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 text-lg font-bold">
+              <img src={user!.picture} className="rounded-full"></img>
+            </div>
+            <div className="flex-1">
+              <p className="text-base font-medium leading-tight">{displayName}</p>
+              <p className="text-xs opacity-80">{user!.email}</p>
+              <p className="text-xs opacity-80">Signed in</p>
+            </div>
+          </div>
+
+          <nav className="mt-2 space-y-2">
+            <Link
+              href="../home"
+              className="block rounded-xl px-4 py-3 font-medium
+                         hover:bg-white/10 hover:ring-1 hover:ring-white/15
+                         focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 text-xl"
+            >
+              Home
+            </Link>
+
+            <Link
+              href="../profile"
+              className="block rounded-xl px-4 py-3 font-medium
+                         hover:bg-white/10 hover:ring-1 hover:ring-white/15
+                         focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 text-xl"
+            >
+              About Us
+            </Link>
+          </nav>
+
+          <div className="mt-auto pt-6">
+            <button
+              onClick={() =>
+                logout({ logoutParams: { returnTo: window.location.origin } })
+              }
+              className="w-full rounded-2xl px-4 py-3 font-semibold text-white shadow-lg
+                         bg-black/70 hover:bg-black
+                         focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60
+                         active:scale-[0.98] transition-all"
+            >
+              Log Out
+            </button>
+
+            <p className="mt-4 text-center text-xs opacity-70">
+              © {new Date().getFullYear()} Your App
+            </p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
 };
 
 export default Navbar;
