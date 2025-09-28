@@ -60,6 +60,11 @@ export default function Home() {
       <div className="flex justify-center">
         <p>Character Limit: {inputValue.length}/250</p>
       </div>
+        </iframe>
+
+        <div className='flex w-screen '>
+          {/* <p>Character Limit: {inputValue.length}/250</p> */}
+        </div>
 
       <div className="flex justify-center">
         <textarea
