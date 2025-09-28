@@ -44,11 +44,11 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-[#0A014F] min-h-screen overflow-hidden text-white">
+        <div className="bg-[#0A014F] min-h-screen overflow-hidden text-white">
       <div className="absolute top-5 left-5">
         <Navbar />
       </div>
-
+    
       <iframe
         className="h-120 w-250 flex mx-auto rounded-full pt-5 mb-5"
         loading="lazy"
@@ -56,29 +56,29 @@ export default function Home() {
         referrerPolicy="no-referrer-when-downgrade"
         src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCGlFIC2YyWVZEEGYJbLQMdBujLkLgWkUg&q=United+States"
       />
-
-      <div className="flex justify-center">
-        <p>Character Limit: {inputValue.length}/250</p>
-      </div>
-
-      <div className="flex justify-center">
+    
+      <div className="mt-4 max-w-3xl mx-auto px-4">
+        <div className="flex justify-between text-sm opacity-90">
+          <span>Character Limit: {inputValue.length}/250</span>
+        </div>
+    
         <textarea
-          className="textarea bg-gray-400 w-250 h-35 text-black"
+          className="textarea bg-gray-200 w-full h-24 text-black mt-2 resize-none"
           maxLength={250}
-          placeholder="Place where you want to vacation here..."
+          placeholder="Type your follow-up for the AI… (Shift+Enter for newline, Enter to send)"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
-      </div>
-
-      <div className="flex justify-center mt-5">
-        <button
-          className="btn btn-success btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl"
-          onClick={handleSend}
-          disabled={!inputValue.trim()}
-        >
-          Done
-        </button>
+    
+        <div className="flex justify-center mt-5">
+          <button
+            className="btn btn-success btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl"
+            onClick={handleSend}
+            disabled={!inputValue.trim()}
+          >
+            Done
+          </button>
+        </div>
       </div>
     </div>
   );
