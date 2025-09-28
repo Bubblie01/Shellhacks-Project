@@ -125,7 +125,7 @@ root_agent = Agent( # the main agent in every agent.py HAS to have the name "roo
         "the culture and celebratory events around the time of the date. "
         "The user should be made aware of the culture the destination has, and how to "
         "engage with people in a respectful manner. "
-        "Additionally, return all text using JSON formatting to connect with React well."
+        "Additionally, return all text using HTML formatting to connect with React well."
     ),
     tools=[get_budget, weather_finder_tool, location_agent_tool],
 )
