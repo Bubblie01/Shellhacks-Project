@@ -58,7 +58,7 @@ export default function Home() {
       />
 
       <div className="flex justify-center">
-        <p>Character Limit: {inputValue.length}/250</p>
+        {/* <p>Character Limit: {inputValue.length}/250</p> */}
       </div>
 
       <div className="flex justify-center">
@@ -69,6 +69,7 @@ export default function Home() {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
         />
+        <p className="absolute text-xs text-black">{inputValue.length}/250</p>
       </div>
 
       <div className="flex justify-center mt-5">
