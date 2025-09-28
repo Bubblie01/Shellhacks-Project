@@ -6,7 +6,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 const Navbar = () => {
   const { logout, user } = useAuth0();
+
   const displayName = user?.name ?? user?.nickname ?? user?.email ?? "Guest";
+  const picture = user?.picture ?? "/avatar.png"; // fallback avatar
 
   return (
     <div className="relative drawer">
@@ -43,11 +45,19 @@ const Navbar = () => {
           {/* Header / Profile */}
           <div className="mb-6 mt-2 flex items-center gap-3 rounded-2xl bg-white/10 p-4 ring-1 ring-white/10">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 text-lg font-bold">
-              <img src={user!.picture} className="rounded-full"></img>
+              <img
+                src={picture}
+                alt={displayName}
+                className="rounded-full"
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = "/avatar.png";
+                }}
+              />
             </div>
             <div className="flex-1">
               <p className="text-base font-medium leading-tight">{displayName}</p>
-              <p className="text-xs opacity-80">{user!.email}</p>
+              {user?.email && <p className="text-xs opacity-80">{user.email}</p>}
               <p className="text-xs opacity-80">Signed in</p>
             </div>
           </div>
