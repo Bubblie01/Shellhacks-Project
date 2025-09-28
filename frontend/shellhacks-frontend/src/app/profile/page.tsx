@@ -89,10 +89,10 @@ export default function Home() {
               </p>
 
               <div className="mt-3 flex flex-wrap items-center gap-3">
-                <span className="badge badge-lg bg-white/15 border-white/20 text-white px-3 py-3 transition delay-150 duration-300 ease-in-out hover:scale-110 hover:shadow-md shadow-white motion-reduce:transition-none motionreduce:hover:transform-none">
+                <span className="badge badge-lg bg-white/15 border-white/20 rounded text-white px-3 py-3 mx-3 transition delay-50 duration-300 ease-in-out hover:scale-110 hover:shadow-sm shadow-white motion-reduce:transition-none motionreduce:hover:transform-none">
                   {selected.role}
                 </span>
-                <span className="badge badge-lg bg-white/10 border-white/20 text-white px-3 py-3 transition delay-150 duration-300 ease-in-out hover:scale-110 hover:shadow-md shadow-white motion-reduce:transition-none motionreduce:hover:transform-none">
+                <span className="badge badge-lg bg-white/10 border-white/20 rounded text-white px-3 py-3 mx-3 transition delay-50 duration-300 ease-in-out hover:scale-110 hover:shadow-sm shadow-white motion-reduce:transition-none motionreduce:hover:transform-none">
                   {selected.email}
                 </span>
               </div>
@@ -100,7 +100,7 @@ export default function Home() {
               <div className="card-actions justify-end mt-6">
                 <a
                   href={`mailto:${selected.email}`}
-                  className="btn btn-primary btn-lg normal-case transition delay-150 duration-300 ease-in-out hover:scale-110 hover:shadow-md shadow-white motion-reduce:transition-none motionreduce:hover:transform-none"
+                  className="btn btn-primary btn-lg normal-case rounded transition duration-300 ease-in-out hover:scale-110 hover:shadow-sm shadow-white motion-reduce:transition-none motionreduce:hover:transform-none"
                 >
                   Contact
                 </a>
@@ -119,7 +119,7 @@ export default function Home() {
               <button
                 key={p.id}
                 onClick={() => setSelected(p)}
-                className={`group relative mx-2 md:mx-3 rounded-2xl p-2 transition-all duration-300 ease-out
+                className={`group relative mx-2 md:mx-3 rounded-2xl p-3 transition-all duration-300 ease-out
                             ${active ? "scale-[1.12] bg-white/10 ring-2 ring-white/30 shadow-lg shadow-indigo-500/20" : "hover:bg-white/10"}`}
                 aria-pressed={active}
                 title={p.name}
@@ -142,15 +142,15 @@ export default function Home() {
                 </div>
 
                 <span
-                  className={`dock-label mt-2 block whitespace-nowrap rounded-lg px-2 py-1
-                              text-sm md:text-base font-medium bg-[#0A014F]/80 ring-1 ring-white/10
+                  className={`dock-label mt-0 block whitespace-nowrap rounded-lg px-2 py-0.5
+                              text-sm md:text-base font-medium bg-[#0A014F]/80 ring-2 ring-white/10
                               ${active ? "opacity-100 translate-y-0" : "opacity-90"}`}
                 >
                   {p.name.split(" ")[0]}
                 </span>
 
                 {active && (
-                  <span className="pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-indigo-400/25 blur-2xl animate-pulse" />
+                  <span className="pointer-events-none absolute inset-0 -z-10 rounded-5xl bg-indigo-400/25 blur-2xl animate-pulse" />
                 )}
               </button>
             );
