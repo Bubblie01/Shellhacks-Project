@@ -27,7 +27,7 @@ export default function Home() {
         name: "Joshua Sawyer",
         role: "Backend/API Engineer",
         email: "jawshs08@gmail.com",
-        avatar: "https://media1.tenor.com/m/p-wIO64HN5cAAAAC/wake-up.gif",
+        avatar: "https://media1.tenor.com/m/I_50ZzW-Ti0AAAAd/dfghjkl.gif",
         bio: "Designed part of the AI agents as well as connected them to one another, helped set up API calls",
       },
       {
