@@ -101,7 +101,11 @@ export default function Home() {
 
         {/* Title with icon (centered, subtle and consistent) */}
         <div className="flex items-center justify-center gap-x-3 mt-8">
-          <h1 className="text-3xl font-bold tracking-wide">Welcome {user!.name}!</h1>
+          {user && (
+            <h1 className="text-3xl font-bold tracking-wide">
+              Welcome {user.name}!
+            </h1>
+          )}
         </div>
 
         {/* Map */}
