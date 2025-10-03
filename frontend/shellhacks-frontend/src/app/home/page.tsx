@@ -81,7 +81,7 @@ export default function Home() {
             loading="lazy"
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"
-            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCGlFIC2YyWVZEEGYJbLQMdBujLkLgWkUg&q=United+States"
+            src="https://www.google.com/maps/embed/v1/place?key=[API_Key]&q=United+States"
             title="Location map"
           />
         </div>
